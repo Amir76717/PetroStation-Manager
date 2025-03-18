@@ -1,0 +1,66 @@
+<div class="container-fluid noselect" style="margin-top:10px;">
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Search Creiteria
+        </mat-panel-title>
+        <mat-panel-description>
+          Enter your desired search Criteria
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <form fxLayout="column" [formGroup]="filterForm" autocomplete="off">
+        <!-- <mat-checkbox style="margin:5px" formControlName="expenses"><span style="color:black;font-size:20px">تكاليف</span></mat-checkbox>
+        <mat-checkbox style="margin:5px" formControlName="sell"><span style="color:black;font-size:20px">البيع</span></mat-checkbox>
+        <mat-checkbox style="margin:5px" formControlName="debits"><span style="color:black;font-size:20px">الديون</span></mat-checkbox> -->
+
+        <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+          <mat-form-field class="inputField">
+            <input matInput [matDatepicker]="fromDate" placeholder="From Date" formControlName="fromDateCtrl">
+            <mat-datepicker-toggle matSuffix [for]="fromDate" tabIndex="-1"></mat-datepicker-toggle>
+            <mat-datepicker touchUi #fromDate></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field class="inputField" class="dateFilter" style="margin-left:30px">
+            <input matInput [matDatepicker]="toDate" placeholder="To Date" formControlName="toDateCtrl">
+            <mat-datepicker-toggle matSuffix [for]="toDate" tabIndex="-1"></mat-datepicker-toggle>
+            <mat-datepicker touchUi #toDate></mat-datepicker>
+          </mat-form-field>
+        <br>
+          <mat-form-field>
+              <mat-select placeholder="Select Employee" formControlName="selectedEmpId" [(ngModel)]="checked" multiple>
+                <mat-option *ngFor="let emp of employees" [value]="emp.empID">{{emp.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+        </div>
+      </form>
+      <button mat-raised-button class="searchFormBtn" name="searchBtn" color="primary" [disabled]="!filterForm.valid"
+        (click)="getResult() ">Get Result</button>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <div *ngIf="this.reportResult" class="reportResult" style="margin-top:50px">
+    <div *ngIf="this.reportResult" style="text-align:center;margin-bottom:20px; background-color: rgb(203, 172, 231)">
+      <span style="font-weight:bold;font-size:20px; margin-left:90px ">مجموع المبيع: <span style="font-weight:bold;font-size:20px;color:black">{{this.totalSale | number}}</span></span>
+      <span style="font-weight:bold;font-size:20px;">مجموع الارباح: <span style="font-weight:bold;font-size:20px;color:green">{{this.totalProfit | number}}</span></span>
+    </div>
+    <div class="table">
+      <table class="table table-bordered table-striped  table-hover text-center">
+        <thead>
+          <th>مجموع الأرباح </th>
+          <th>مجموع المبيعات</th>
+          <th>كمية المبيعات</th>
+          <th>الأسم</th>
+        </thead>
+        <tbody>
+          <tr *ngFor = "let result of reportResult" (click)="getSelectedRow(result.type)">
+            <td style="color:green">{{result.totalProfit | number}}</td>
+            <td>{{result.totalSale | number}}</td>
+            <td><span *ngIf="result.litersSold">{{result.litersSold | number}} Liters</span></td>
+            <td style = "color:black;font-weight: bold">{{result.type == 95 ? "Benzene 95" : result.type == 98 ? "Benzene 98" :result.type== 'access' ? "اكسسوارات" : result.type == 'lub' ? "زيوت" : result.type=='payC' ? "مدفوعات" : result.type=='wash'? "غسيل" : result.type=="Diesel G" ? "Diesel Green" : "" }}</td>
+          </tr>
+        </tbody>
+    </table>
+    </div>
+  </div>
+</div>
