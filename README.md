@@ -1,2 +1,2 @@
 # PetroStation-Manager
-A dynamic web application for managing gasoline stations, built with Angular 6, featuring robust testing and deployment capabilities.
+PetroStation Manager is an advanced web application designed for efficient management of gasoline stations. Developed using Angular 6 for the front-end and the CodeIgniter framework for back-end operations, this system offers robust features for operational control, including inventory management, sales tracking, and customer service enhancements.
