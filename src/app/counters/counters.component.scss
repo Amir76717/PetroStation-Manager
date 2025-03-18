@@ -1,0 +1,88 @@
+.form-field {
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+    font-size: 20px
+}
+.container-fluid{
+    background-image: url("/../assets/icons/dispanserIcons/background.png");
+
+}
+.container-fluid::after{
+    opacity: 0.5;
+}
+input {
+    color: blue;
+}
+.tileCol1{
+    // background-color:rgb(240,248,255);
+    background-color: rgb(230,330,230)
+}
+.tileCol2{
+    background-color:rgb(215, 236, 252);
+}
+.tileCol3{
+    background-color:rgb(188, 221, 250);
+}
+.tileCol4{
+    background-color:rgb(178, 218, 253);
+}
+.tileCol5{
+    background-color:rgb(227, 242, 255);
+}
+.dispanser{
+    width: 100%;
+    height: 100%;
+}
+.dispanser:hover{
+    background-color:thistle;
+    // opacity: 0.5;
+}
+.dispanserDiv{
+    width:140px; 
+    height:140px;
+    // border: solid thistle 1px;
+    // border-radius: 20px;
+}
+.bottom-left{
+    margin-top:450px;
+    // background-color:red;
+    position: absolute;
+}
+.middle-1-to-left{
+    margin-top:100px;
+    margin-left: 420px;
+    position: absolute;
+    // background-color:green;
+}
+.middle-1-to-right{
+    margin-top:100px;
+    margin-left: 630px;
+    // background-color:blue;
+    position: absolute;
+}
+.dispLabel{
+    margin-left:55px;
+    font-weight: bold;
+    position: absolute;
+    margin-top: -25px;
+    color:firebrick
+}
+.office{
+    // width:100%;
+    // height: 100%;
+}
+.officeDiv{
+    // width:140px;
+    // height:140px;
+    margin-top: 420px;
+    margin-left: 450px;
+}
+.officeLabel{
+    margin-left:140px;
+    font-weight: bold;
+    position: absolute;
+    margin-top: -25px;
+    color:firebrick
+}
+

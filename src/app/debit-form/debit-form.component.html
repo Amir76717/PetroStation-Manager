@@ -1,0 +1,127 @@
+
+<div style="height: 600px;padding-top: 100px" class="container-fluid" style="float: right; text-align: right;margin-top: 50px;" dir="rtl">
+  <!-- <h6>back icons options</h6> -->
+  <form [formGroup]="debitForm">
+
+      <!-- <mat-form-field style="width: 50%;margin-right: 5px;">
+        <mat-select placeholder="إسم {{person}}" formControlName="personName">
+          <mat-option *ngFor="let c of clients " 
+          (onSelectionChange)="getSelectedClientData($event,c)" 
+          [value]="c.full_name" >{{c.full_name}} | <span style="color:red"> مبلغ الدين: {{c.debitAmount | currency:'ل.ل ':'symbol':'1.0-0' }}</span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field> -->
+
+      <!-- <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"> -->
+        <mat-form-field style="width: 50%;margin-right: 5px;" class="searchClient" fxFlex>
+
+          <input id="searchClientName" matInput placeholder="Client" formControlName="personName" type="text" name="nameInput"
+            [matAutocomplete]="auto" autofocus>
+            <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearClientName()">
+              <mat-icon>close</mat-icon>
+           </button>
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let c of clients " 
+            (onSelectionChange)="getSelectedClientData($event,c)" 
+            [value]="c.full_name" >{{c.full_name}} | <span style="color:red"> مبلغ الدين: {{c.debitAmount | currency:'ل.ل ':'symbol':'1.0-0' }}</span>
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error> يرجى اضافة اسم الزبون</mat-error>
+        </mat-form-field>
+      <!-- </div> -->
+
+
+      <button mat-raised-button color="primary" (click)="openPersonModal(personModal)">
+        <i class="material-icons">add</i> إضافة {{person}}
+      </button>
+      <div *ngIf="this.debitForm.value.invoiceType == 'supply'">
+        <div  formArrayName="items">
+          <div *ngFor="let item of itemsForm.controls; let i=index" [formGroupName]="i">
+              <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                  <mat-form-field fxFlex  class="searchInput" style="text-align: center;">
+                      <input style="font-size:30px" matInput placeholder="الإسم" formControlName="name" type="text" 
+                      name="nameInput"  [readonly]="true">
+                  </mat-form-field>
+                  <mat-form-field fxFlex class="itemInputs">
+                      <input style="font-size:30px"  matInput placeholder="الكمية" formControlName="quantity" type="number" min="0" (ngModelChange)="rowChangePrice(i)" >
+                  </mat-form-field>
+                  <mat-form-field fxFlex class="itemInputs">
+                      <input style="font-size:30px" matInput placeholder="كلفة الشراء" formControlName="price" type="number" min="0" (ngModelChange)="rowChangePrice(i)" >
+                      <span matSuffix>ل.ل&nbsp;</span>
+                  </mat-form-field>
+                  <mat-form-field fxFlex class="itemInputs">
+                      <input style="font-size:30px"  matInput placeholder="المجوع" formControlName="totalPrice" type="number" min="0" [readonly]="true">
+                      <span matSuffix>ل.ل&nbsp;</span>
+                  </mat-form-field>
+                  <button mat-icon-button (click)="deleteItem(i,true)" color="warn" tabindex="-1">
+                      <mat-icon aria-label="Delete Item" title="Delete Item">close</mat-icon>
+                  </button>
+              </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="this.debitForm.value.invoiceType == 'sellFuelDebit'">
+        <mat-form-field style="width: 50%;margin-right: 5px;">
+          <mat-select matInput placeholder="فيول"  formControlName="type">
+            <mat-option value="95_d">95</mat-option>
+            <mat-option value="98_d">98</mat-option>
+            <!-- <mat-option value="dieselR_d">Diesel R</mat-option> -->
+            <mat-option value="dieselG_d">Diesel G</mat-option>
+          </mat-select>
+      </mat-form-field>
+      </div>
+        <p>
+      <mat-form-field appearance="outline" style="padding-right: 50px;width:20%" *ngIf="this.debitForm.value.invoiceType == 'sellFuelDebit'">
+        <mat-label>المبلغ الإجمالي</mat-label>
+        <input matInput placeholder="المبلغ الإجمالي" step="500" type="number" formControlName="totalPrice" (ngModelChange)="changeTotalPrice()" >
+        <span matSuffix>ل.ل&nbsp;</span>
+      </mat-form-field>
+      <mat-form-field appearance="outline" style="width:40%">
+        <mat-label>دفع</mat-label>
+        <input matInput placeholder="دفع" step="500" type="number" formControlName="amountPaid" (ngModelChange)="changeAmountPaid()" >
+        <span matSuffix>ل.ل&nbsp;</span>
+        <mat-hint> <code ><h5 style="width:100%;" *ngIf="debitForm.value.amountRest >= 0">البافي: {{debitForm.value.amountRest | currency:'ل.ل ':'symbol':'1.0-0' }} </h5></code> </mat-hint>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" style="padding-left: 50px;width:600px">
+        <mat-label>ملحوظة</mat-label>
+        <input matInput placeholder="ملحوظة" formControlName="comment">
+      </mat-form-field>
+    </p>
+  </form>
+  <span  *ngIf="typePage != 'supplyAccess' && typePage != 'supplyLub'">
+    <button style="width:200; height: 45px;" color="primary" mat-raised-button [disabled]="!debitForm.valid" (click)="submitDebitFormData()">تسجيل</button>
+  </span>
+  <span  *ngIf="typePage == 'supplyAccess' || typePage == 'supplyLub'" >
+    <button style="width:200; height: 45px;" color="primary" mat-raised-button [disabled]="!debitForm.valid || !itemsForm.valid" (click)="submitDebitFormData()">تسجيل</button>
+  </span>
+</div>
+<ng-template #personModal let-c="close" let-d="dismiss" style="text-align: right">
+  <div class="modal-header noselect">
+    <h4 class="modal-title" id="modal-basic-title">إضافة {{person}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+    </button>
+  </div>
+  <div class="modal-body">
+    <form fxLayout="column" [formGroup]="personForm" autocomplete="off">
+      <div class="input-row" fxLayout="row">
+        <mat-form-field class="inputField" fxFlex style="text-align: right">
+          <input matInput placeholder="اسم" formControlName="name" type="text" name="nameInput" autofocus>
+          <mat-error> مطلوب اسم</mat-error>
+        </mat-form-field>
+        <!-- <span *ngIf="isExist == true && editFlag==false" style="color:red"> Client exist!</span> -->
+      </div>
+      <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+        <mat-form-field class="inputField" fxFlex style="text-align: right">
+          <input matInput placeholder="رقم الهاتف" formControlName="phone" type="text">
+          <mat-error> الهاتف مطلوب</mat-error>
+        </mat-form-field>
+      </div>
+
+    </form>
+  </div>
+  <div class="modal-footer noselect">
+    <button mat-raised-button name="addButton" color="primary" (click)="addPerson()" [disabled]="!personForm.valid">تسجيل</button>
+      <button mat-raised-button name="addButton" color="accent" (click)="d('Cross click')">خروج</button>
+    </div>
+</ng-template>

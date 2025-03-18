@@ -1,0 +1,45 @@
+<div class="container-fluid" style="float: right; text-align: right;margin-top: 20px;" dir="rtl">
+    <mat-accordion>
+        <mat-expansion-panel [expanded]="isOpened === 1" (opened)="togglePanel(1)">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-action-row>
+                  <button mat-button color="primary" >{{typeSubmit}} موظف +</button>
+              </mat-action-row>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+         <form [formGroup]="addEmpForm">
+            <mat-form-field>
+                <input formControlName="empFullName" matInput placeholder="الإسم الكامل" required>
+              </mat-form-field>
+              <mat-form-field style="padding-right: 10px">
+                <input formControlName="empUserName" matInput placeholder="اسم المستخدم" required>
+              </mat-form-field>
+              <mat-form-field style="padding-right: 10px">
+                <input formControlName="empPassword" matInput placeholder="كلمه السر" required>
+              </mat-form-field>
+                <mat-checkbox formControlName="empType" tyle="padding-right: 10px" 
+                class="example-margin" [(ngModel)]="checked">
+                  Admin
+                </mat-checkbox>
+
+         </form>
+          <mat-action-row>
+              <button mat-button color="primary" (click)="addNewEmployee()" [disabled]="!addEmpForm.valid">{{typeSubmit}}</button>
+              <button mat-button color="warn" (click)="collapse()" >إلغاء</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+    </mat-accordion>
+    <div><hr></div>
+  <table class="table table-striped table-bordered table-hover table-sm noselect " id="employeeDT">
+    <thead>
+    </thead>
+    <tbody #contextScope>
+    </tbody>
+  </table>
+  <p-contextMenu [target]="contextScope" [model]="items" oncontextmenu="return false;"></p-contextMenu>
+  </div>
+  <div hidden>
+    <button id="deleteBtn" (click)="deleteEmployee()"></button>
+    <button id="editBtn" (click)="editFlag=true;openEmployeeModal()"></button>
+  </div>

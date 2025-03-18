@@ -1,0 +1,12 @@
+<div class="container-fluid" style="float: right; text-align: right;margin-top: 10px;" dir="rtl">
+    <mat-grid-list  cols="4" rowHeight="160px" class="tile-container">
+        <mat-grid-tile class="tile-grid"  (click)="openDebitModal(debitModal,this.tile.text,i)"
+            *ngFor="let tile of debit; let i = index" [attr.data-index]="i" 
+            [colspan]="tile.cols"
+            [rowspan]="tile.rows"
+            [style.background]="tile.color">
+            <!-- {{i+1}} -->  
+            <img style="width: 321px; height: 118px;" class="tile-image" src="../assets/icons/debitsIcons/{{i}}.png" >
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>
