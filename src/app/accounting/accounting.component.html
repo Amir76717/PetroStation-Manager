@@ -1,0 +1,33 @@
+<div class="container-fluid" dir="rtl" style="margin-top: 10px;">
+  <div class="row">
+    <div class="col-lg-6" >
+      <h2>
+        <mat-form-field style="width: 100%;" *ngIf="isAdmin == true" >
+            <mat-select placeholder="تحديد موظف" [formControl]="shiftIDForm" [(ngModel)]="checked" multiple>
+              <mat-option *ngFor="let emp of employees " [value]="emp.shiftID">{{emp.name}} من الساعة {{emp.timeIn}} إلى {{emp.timeOut}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+      </h2>
+    </div>
+    <div class="col-lg-6" style="padding-top: 40px;width: 100%; text-align: center;">
+      <h2 >
+        <!-- <span>Cash: </span>
+        <span style="color:green;">{{totalDrawer | number}}</span> -->
+        <span>الصندوق: </span> 
+        <span style="color:green;">{{totalDrawer | currency:'ل.ل ':'symbol':'1.0-0' }}</span>
+      </h2>
+    </div>
+  </div>
+    <div>
+      <mat-grid-list cols="4" rowHeight="130px" class="tile-container">
+          <mat-grid-tile class="tile-grid" (click)="selectAccounting(this.tile.text,i+1)"  
+              *ngFor="let tile of tiles; let i = index" [attr.data-index]="i" 
+              [colspan]="tile.cols"
+              [rowspan]="tile.rows"
+              [style.background]="tile.color">
+              <!-- {{i+1}} -->  
+            <img style="width: 321px; height: 118px;" class="tile-image" src="../assets/icons/accountingIcons/{{i+1}}.png">
+          </mat-grid-tile>
+      </mat-grid-list>
+    </div>
+</div>
