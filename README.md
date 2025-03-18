@@ -13,36 +13,32 @@ What you need to install the software:
 # Installing
 A step-by-step series of examples that tell you how to get a development environment running:
 
-  1. Start the development server:
+**1. Start the development server:**
 
-    ng serve
+        ng serve
 Open http://localhost:4200/ to view it in the browser. The application will automatically reload if you change any of the source files.
 
-  2. Build the project:
+**2. Build the project:**
 
-    ng build
+        ng build
 Use the --prod flag for a production build. The build artifacts will be stored in the dist/ directory.
 
-Running Tests
-Unit tests
+# Running Tests
+**1. Unit tests**
 
-bash
-Copy
-ng test
+    ng test
 Executes the unit tests via Karma.
 
-End-to-end tests
+**2. End-to-end tests**
 
-bash
-Copy
-ng e2e
+    ng e2e
 Executes the end-to-end tests via Protractor.
 
-Further Help
+# Further Help
 For more help with Angular CLI commands, use ng help or check out the Angular CLI Overview and Command Reference.
 
-Contributing
+# Contributing
 Please read CONTRIBUTING.md for details on our code of conduct, and the process for submitting pull requests to us.
 
-License
+# License
 This project is licensed under the MIT License - see the LICENSE.md file for details.
