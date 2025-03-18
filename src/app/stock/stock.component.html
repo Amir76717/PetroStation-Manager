@@ -1,0 +1,162 @@
+<div class="container-fluid" style="margin-top: 10px;float: right; text-align: right;"  dir="rtl">
+    <mat-tab-group id="tabs" mat-stretch-tabs (selectedTabChange)="displayTables($event)">
+      <!-- <mat-tab label="Fuel">
+        <mat-grid-list cols="4" rowHeight="180px" class="tile-container">
+            <mat-grid-tile class="tile-grid" (click)="selectOperation(this.container.name,i+1)"  
+                *ngFor="let container of fuelContainers; let i = index" [attr.data-index]="i" 
+                [colspan]="2"
+                [rowspan]="1"
+                [style.background]="this.fuelColor">
+                <div style="margin-top: -120px;color:rgb(119, 4, 119)"><h2>{{container.name}}</h2> </div>
+                <div style="margin-left: -140px;color:black"><h4>{{container.current_quan_liter}} </h4></div>
+            </mat-grid-tile>
+          </mat-grid-list>
+      </mat-tab> -->
+      <ng-template #containerModal let-c="close" let-d="dismiss">
+        <div class="modal-header noselect">
+          <h4 class="modal-title" id="modal-basic-title" style="color:firebrick;">{{container_name}}  {{container_capacity}} - <span style="color:green"> {{container_totalPrice |number}}  القيمة: ل.ل </span></h4>
+          <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        
+        <div class="modal-body noselect">
+
+            <form fxLayout="column" autocomplete="off" [formGroup]="editContainerLitersForm">
+              <div class="input-row" fxLayout="row">
+                <mat-form-field class="inputField" appearance="outline" style="width:100%">
+                    <mat-label style="font-size: 40px;font-weight: 200;color:firebrick;opacity: 0.7;"><span style="color:firebrick;font-weight: 100;opacity: 0.5;">{{container_currentQuantity}} </span> </mat-label>
+                  <input style="font-size:50px;color: firebrick" matInput  type="number" formControlName="quantity_liter">
+                  <!-- <mat-hint *ngIf="(counterVal_1 - this.counters[this.index].counter_1)>0" style="color:purple;font-weight: bold;font-size: 18px">Sold: {{counterVal_1 - this.counters[this.index].counter_1 }} Liters</mat-hint> -->
+                </mat-form-field>
+              </div>
+          </form>
+        </div>
+        <div class="modal-footer noselect">
+          <button (click)="changeQuantity()" mat-raised-button color="primary">Submit</button>
+          <button mat-raised-button color="warn">cancel</button>
+        </div>
+    </ng-template>
+     <mat-tab label="فيول">
+       <div class="container-fluid "dir="ltr" >
+        <div id="fuelContView" style="border:1px solid #000000; margin-top: 20px">
+          <div *ngFor="let container of containers; let i = index"  class="containerDiv {{container.style}}" (click)="openContainerModal(container.contID,containerModal,container.name,container.current_quan_liter,container.capacity,container.price_liter)">
+              <!-- <span class="contLabel"> </span> -->
+              <br>
+              <span class="contLabel" style="color:firebrick; background-color: rgba(176, 91, 212, 0.5);border-radius: 10px;font-weight: bold;margin-right: 70px"> <h5 style="color:black">{{container.name=='Benzene 98'? 'B 98':container.name }} {{container.capacity }}</h5> <span style="margin-right:20px">{{container.current_quan_liter}}</span></span>
+            <img title="{{container.name }} {{container.capacity }}" class="container" src="../assets/icons/containerIcons/0.png">
+          </div>
+        
+          <div class="officeDiv">
+            <span class="officeLabel">Office</span>
+              <img class="office" src="../assets/icons/office.png">
+          </div>
+        
+        </div>
+      </div>
+    </mat-tab> 
+      <mat-tab label="زيوت">
+        <div class="container-fluid" >
+            <mat-accordion>
+                <form [formGroup]="addLubForm">  
+                  <mat-expansion-panel  [expanded]="isOpened === 1" (opened)="togglePanel(1)">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                          <mat-action-row>
+                              <button mat-button color="primary" ><span style="font-size: 20px;color:purple">+ {{typeSubmitLub}} زيت +</span></button>
+                          </mat-action-row>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <mat-form-field>
+                      <input formControlName="name" matInput required>
+                      <mat-placeholder class="placeholder">الإسم</mat-placeholder>
+                    </mat-form-field>
+                    <mat-form-field style="padding-right: 10px">
+                      <input formControlName="quantity" matInput type="number" required>
+                      <mat-placeholder class="placeholder">الكمية</mat-placeholder>
+                    </mat-form-field>
+                    <mat-form-field style="padding-right: 10px">
+                      <input formControlName="selling" matInput type="number" step="500" required>
+                      <mat-placeholder class="placeholder">سعر البيع</mat-placeholder>
+                      <span matSuffix>ل.ل&nbsp;</span>
+                    </mat-form-field>
+                    <mat-form-field style="padding-right: 10px">
+                      <input formControlName="cost" matInput type="number" step="500" required>
+                      <mat-placeholder class="placeholder">سعر الشراء</mat-placeholder>
+                      
+                      <span matSuffix>ل.ل&nbsp;</span>
+                    </mat-form-field>
+                    <mat-action-row>
+                      <button mat-button color="primary" (click)="addLubricant()" [disabled]="!addLubForm.valid"><span style="color:purple;font-size:20px">{{typeSubmitLub}}</span></button>
+                      <button mat-button color="warn" (click)="collapse()"><span style="color:red;font-size:20px">إلغاء</span></button>
+                    </mat-action-row>
+                  </mat-expansion-panel>
+                </form>
+            </mat-accordion>
+            <div><hr></div>
+            <table class="table table-striped table-bordered table-hover table-sm noselect " id="lubDT">
+              <thead>
+              </thead>
+              <tbody #contextScopeLub>
+              </tbody>
+            </table>
+            <p-contextMenu [target]="contextScopeLub" [style]="{'color':'purple','text-align':'center','font-size':'20px','font-weight':'bold'}" [model]="itemsLub" appendTo="body"  oncontextmenu="return false;"></p-contextMenu>
+            <div hidden>
+              <button id="deleteLubBtn" (click)="deleteLub()"></button>
+              <button id="editLubBtn" (click)="editLubFlag=true;openLubModal()"></button>
+            </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="إكسسوارات">
+        <div class="container-fluid" > 
+          <mat-accordion>
+              <mat-expansion-panel [expanded]="isOpenedAccess === 1" (opened)="togglePanelAccess(1)">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                      <mat-action-row>
+                          <button mat-button color="primary" > <span style="color:purple; font-size: 20px">+ {{typeSubmitAccess}} إكسسوارات +</span></button>
+                      </mat-action-row>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+               <form [formGroup]="addAccessForm">  
+                  <mat-form-field>
+                    <input matInput formControlName="name" type="text" required>
+                    <mat-placeholder class="placeholder">الإسم</mat-placeholder>
+                  </mat-form-field>
+                  <mat-form-field style="padding-right: 10px">
+                    <input matInput formControlName="quantity" type="number" required>
+                    <mat-placeholder class="placeholder">الكمية</mat-placeholder>
+                  </mat-form-field>
+                  <mat-form-field style="padding-right: 10px">
+                    <input matInput formControlName="selling" type="number" required>
+                    <mat-placeholder class="placeholder">سعر البيع</mat-placeholder>
+                    <span matSuffix>ل.ل&nbsp;</span>
+                  </mat-form-field>
+                  <mat-form-field style="padding-right: 10px">
+                    <input matInput formControlName="cost" type="number" required>
+                    <mat-placeholder class="placeholder">سعر الشراء</mat-placeholder>
+                    <span matSuffix>ل.ل&nbsp;</span>
+                  </mat-form-field>
+               </form >
+                <mat-action-row>
+                    <button mat-button color="primary" (click)="addNewAccess()" [disabled]="!addAccessForm.valid"><span style="color:purple; font-size: 20px">{{typeSubmitAccess}}</span> </button>
+                    <button mat-button color="warn" (click)="collapseAccess()"><span style="color:red;font-size: 20px"> إلغاء </span></button>
+                  </mat-action-row>
+              </mat-expansion-panel>
+          </mat-accordion>
+          <div><hr></div>
+          <table class="table table-striped table-bordered table-hover table-sm noselect " id="accessDT">
+              <thead>
+              </thead>
+              <tbody #contextScopeAccess>
+              </tbody>
+            </table>
+            <p-contextMenu [target]="contextScopeAccess" [style]="{'color':'purple','text-align':'center','font-size':'20px','font-weight':'bold'}" [model]="itemsAccess" appendTo="body" oncontextmenu="return false;"></p-contextMenu>
+            <div hidden>
+              <button id="deleteAccessBtn" (click)="deleteAccess()"></button>
+              <button id="editAccessBtn" (click)="editAccessFlag=true;openAccessModal()"></button>
+            </div>
+      </div>
+      </mat-tab>
+    </mat-tab-group>  
+</div>
